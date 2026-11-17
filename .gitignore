@@ -1,0 +1,81 @@
+# Media and per-job work: big, regenerated per job (finished videos are downloaded from the session)
+/downloads/
+/jobs/
+/videos/
+/output/
+*.part
+.render.lock
+
+# OpenMontage for /montage: installed by tools/montage/setup.sh at a pinned commit (holds .env with the user's API keys)
+/vendor/
+
+# Local-only machine state
+.claude/settings.local.json
+.claude/backups/
+node_modules/
+__pycache__/
+*.pyc
+.env
+*.log
+
+# Empty stub folders the skills installer made for ~50 other coding agents, and its root symlinks
+/.*/
+!/.claude/
+!/.agents/
+!/.github/
+/skills/
+
+# Windows symlinks to .agents/skills (absolute paths); cloud-setup.sh recreates them on Linux
+/.claude/skills/embedded-captions
+/.claude/skills/faceless-explainer
+/.claude/skills/figma
+/.claude/skills/remove-ai-marks
+/.claude/skills/general-video
+/.claude/skills/hyperframes
+/.claude/skills/hyperframes-animation
+/.claude/skills/hyperframes-audio
+/.claude/skills/hyperframes-cli
+/.claude/skills/hyperframes-core
+/.claude/skills/hyperframes-creative
+/.claude/skills/hyperframes-keyframes
+/.claude/skills/hyperframes-registry
+/.claude/skills/hyperframes-studio
+/.claude/skills/media-use
+/.claude/skills/motion-graphics
+/.claude/skills/music-to-video
+/.claude/skills/pr-to-video
+/.claude/skills/product-launch-video
+/.claude/skills/remotion-to-hyperframes
+/.claude/skills/slideshow
+/.claude/skills/talking-head-recut
+
+# Skill links created in cloud sessions by cloud/session-start.sh (custom skills from cloud/skills)
+/.claude/skills/cleanup-project
+/.claude/skills/commentary-short
+/.claude/skills/gab
+/.claude/skills/puregrit
+/.claude/skills/viral-shorts
+/.claude/skills/youtube-style-clip
+# Fetched/rebuilt in the cloud by cloud/session-start.sh (too big for the PC uplink)
+commentary-kit/music/Night on the Docks - Sax.mp3
+commentary-kit/music/Thinking Music.mp3
+commentary-kit/music/Carefree.mp3
+commentary-kit/music/Local Forecast - Elevator.mp3
+commentary-kit/music/Hitman.mp3
+commentary-kit/music/Pixel Peeker Polka - faster.mp3
+commentary-kit/music/Wallpaper.mp3
+commentary-kit/music/Dark Fog.mp3
+commentary-kit/transitions/static_glitch_0.5s.mp4
+
+.hyperframes/
+
+# Private files: kept in gmacc616/ai-video-editor-private and linked in by cloud/session-start.sh (never commit them here)
+/sound effects
+/assets/gab
+/cloud/memory
+/cloud/skills/gab
+/cloud/skills/default-voice/voice
+/.claude/commands/boxabl.md
+/data/youtube
+/docs/brezscales-account-setup.md
+/prompts

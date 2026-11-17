@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "roblox-studio": {
+      "command": "C:\\Users\\manth\\AppData\\Local\\Roblox\\Versions\\version-7062aec9dbe74b14\\StudioMCP.exe",
+      "args": ["--stdio"]
+    }
+  }
+}

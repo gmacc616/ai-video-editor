@@ -1,0 +1,63 @@
+name: Render shorts
+# Renders a committed HyperFrames project (folder of clipNN/index.html) to MP4s and uploads them as an artifact.
+# Inputs reach the shell only through env vars, never by ${{ }} text substitution into scripts.
+on:
+  workflow_dispatch:
+    inputs:
+      project_dir:
+        description: Repo folder holding clip01/, clip02/ ... each with index.html
+        required: true
+        default: tests/render-smoke
+      clips:
+        description: Optional space-separated clip folders (default all)
+        required: false
+      drive_link:
+        description: Optional Google Drive link shared as Anyone with the link, downloaded into downloads/ before rendering
+        required: false
+permissions:
+  contents: read
+env:
+  PROJECT_DIR: ${{ inputs.project_dir }}
+  CLIPS: ${{ inputs.clips }}
+  DRIVE_LINK: ${{ inputs.drive_link }}
+concurrency:
+  group: render
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-latest   # standard Linux runner: 1x minutes, free quota applies
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate inputs
+        run: |
+          [[ "$PROJECT_DIR" =~ ^[A-Za-z0-9._/-]+$ && "$PROJECT_DIR" != *..* && -d "$PROJECT_DIR" ]] || { echo "bad project_dir: $PROJECT_DIR"; exit 1; }
+          [[ -z "$CLIPS" || "$CLIPS" =~ ^[A-Za-z0-9._\ -]+$ && "$CLIPS" != *..* ]] || { echo "bad clips: $CLIPS"; exit 1; }
+          [[ -z "$DRIVE_LINK" || "$DRIVE_LINK" =~ ^https://[A-Za-z0-9./?=_\&%-]+$ ]] || { echo "bad drive_link"; exit 1; }
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ~/.cache/hyperframes
+          key: hf-${{ runner.os }}-${{ hashFiles('cloud/setup-render.sh') }}
+      - run: bash cloud/setup-render.sh
+      - name: Fetch source
+        if: ${{ inputs.drive_link != '' }}
+        run: bash cloud/fetch-drive.sh "$DRIVE_LINK"
+      - name: Render
+        run: |
+          read -ra CLIP_LIST <<< "$CLIPS"
+          bash tools/pipeline/render-shorts.sh "$PROJECT_DIR" output/ci "${CLIP_LIST[@]}"
+      - name: Fail if nothing rendered
+        run: ls output/ci/*.mp4 && ! grep -l "RENDER FAILED" "$PROJECT_DIR/render.log"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: shorts
+          retention-days: 3
+          path: |
+            output/ci/*.mp4
+            ${{ inputs.project_dir }}/render.log
+            ${{ inputs.project_dir }}/clip*/render_out.txt

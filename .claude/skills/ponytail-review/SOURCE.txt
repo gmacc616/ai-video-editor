@@ -1,0 +1,2 @@
+Source: https://github.com/dietrichgebert/ponytail (skills/ponytail-review, commit 09c434a, MIT).
+Adopted unchanged on 2026-10-25; the core ponytail rules were merged into CLAUDE.md "Writing code" instead of installed.
