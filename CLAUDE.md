@@ -1,5 +1,7 @@
 # AI-Video-Editor (commentary + HyperFrames workflows)
 
+What this project is for and how it got here: `PROJECT-OVERVIEW.md`.
+
 **This repo (`gmacc616/ai-video-editor`) is PUBLIC (2026-11-17).** Private files live in `gmacc616/ai-video-editor-private`: `sound effects/`, `assets/gab`, `cloud/memory`, `cloud/skills/gab`, `cloud/skills/default-voice/voice`, `.claude/commands/boxabl.md`, `data/youtube`, `docs/brezscales-account-setup.md`, `prompts/`. They are gitignored here and linked in by `cloud/session-start.sh`; commit and push changes to them in the `-private` clone. Never commit secrets, licensed media, campaign briefs or personal notes here.
 
 ## Token-efficient tooling (project-local)
