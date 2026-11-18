@@ -79,3 +79,6 @@ commentary-kit/transitions/static_glitch_0.5s.mp4
 /data/youtube
 /docs/brezscales-account-setup.md
 /prompts
+
+# Symlink made by cloud/session-start.sh each session
+/.claude/skills/default-voice

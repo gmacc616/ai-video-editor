@@ -5,7 +5,7 @@
 #   bash cloud/fetch-release.sh --list [tag=sources]
 # REPO=owner/name overrides the repo (used by the self-check against a public repo).
 set -euo pipefail
-REPO="${REPO:-gmacc616/ai-video-editor}"
+REPO="${REPO:-gmacc616/ai-video-editor-private}"  # the release moved here when ai-video-editor went public (2026-11-17)
 if [ "${1:-}" = "--list" ]; then NAME=""; TAG="${2:-sources}"; else NAME="${1:?usage: fetch-release.sh <file name> [tag] [out dir]}"; TAG="${2:-sources}"; fi
 OUT="${3:-downloads}"
 AUTH=(); [ -n "${GH_TOKEN:-}" ] && AUTH=(-H "Authorization: Bearer $GH_TOKEN")

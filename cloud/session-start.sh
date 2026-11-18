@@ -82,6 +82,13 @@ if ! command -v rtk >/dev/null 2>&1; then
   rm -rf "$T"
 fi
 
+# graphify (vault graph refresh after every logged session): same version as the PC, plus its /graphify skill.
+if ! command -v graphify >/dev/null 2>&1 && [ ! -x "$HOME/.local/bin/graphify" ]; then
+  { command -v uv >/dev/null 2>&1 && uv tool install -q graphifyy==0.9.101 || pip install -q graphifyy==0.9.101; } \
+    || echo "WARN: graphify not installed; the vault graph can't be refreshed this session"
+fi
+[ -f "$HOME/.claude/skills/graphify/SKILL.md" ] || PATH="$HOME/.local/bin:$PATH" graphify install --platform claude >/dev/null 2>&1 || true
+
 # Perplexity MCP removed (user decision 2026-11-17): drop it from older sessions' config too.
 python3 - <<'PY' || true
 import json, os
