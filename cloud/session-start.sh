@@ -133,6 +133,10 @@ for d in "$VAULT"/.claude/skills/*/; do
 done
 [ -f "$VAULT/cloud/3d-bootstrap.sh" ] && { setsid nohup bash "$VAULT/cloud/3d-bootstrap.sh" > /root/3d-bootstrap.log 2>&1 < /dev/null & }
 
+# Cutline (timeline review before every long-form render, docs/editing-workflow.md Step 5): install once in the
+# background (~3 min, pnpm + build), then start it on localhost:4100. Log /root/cutline-bootstrap.log.
+setsid nohup bash -c "bash '$ROOT/tools/cutline/setup.sh' && bash '$ROOT/tools/cutline/start.sh'" > /root/cutline-bootstrap.log 2>&1 < /dev/null &
+
 # Pointer for sessions that start outside the repo.
 cat > "$HOME/.claude/CLAUDE.md" <<EOF
 # AI-Video-Editor cloud workspace

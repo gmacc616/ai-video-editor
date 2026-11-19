@@ -112,6 +112,18 @@ Rules for the cut list:
 ## Step 5: Edit
 Per clip:
 1. **Cut** the segments into `clipNN/tight.mp4`. Use `cut-mistakes` then `cut-silences` (or `auto-editor`) to remove dead air, keeping reaction beats. Check sentence boundaries with `check-bounds.js`.
+1b. **Timeline review in Cutline (user rule, 2026-11-19): every long-form clip/edit job stops here until the user approves.**
+   - `bash tools/cutline/start.sh` (installs on first use; cloud sessions start it in the background). One project per clip:
+     `bash tools/cutline/mcp.sh create_project '{"name":"clip01"}'`, `add_asset` with the source's absolute `path`, then one
+     `add_clip` per kept range (`sourceStart`, `duration`) in story order. Tools: `vendor/cutline/docs/mcp-tools.md`.
+   - **On the PC:** send the editor link (`http://localhost:4100/p/<projectId>`); the user trims, moves, splits and deletes on the
+     timeline themselves. **In the cloud** their browser can't reach the editor (no preview port, tunnels are blocked): send a
+     review render (`render_preview`, 640 px) plus a numbered list of the ranges (source in/out, first and last words), apply
+     their changes with the same tools, and resend until they approve.
+   - Never start step 2 before an explicit approval. Then `node tools/cutline/export-cut.js <projectId> clipNN/tight.mp4`
+     turns the approved bottom video track into the cut; it lists anything it ignored (overlays, extra tracks), and fails on
+     speed changes. Cutline's own `export_video` is not the final render: it has only crossfade/dip transitions, so the
+     house look, CapCut transitions and sfxv2 sounds still come from steps 3-7.
 2. **Transcribe the clip.** Fix Whisper mishearings (names, brand spellings) in `fixes`.
 3. **Crop and grade:** run `track-faces.py --write`, correct the crops by eye from frames of `tight.mp4`, then `reframe.py` with the style sheet's grade.
 4. **Build:**
