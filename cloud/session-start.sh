@@ -132,6 +132,10 @@ for d in "$VAULT"/.claude/skills/*/; do
   ln -sfn "$(readlink -f "$d")" "$HOME/.claude/skills/$n"
 done
 [ -f "$VAULT/cloud/3d-bootstrap.sh" ] && { setsid nohup bash "$VAULT/cloud/3d-bootstrap.sh" > /root/3d-bootstrap.log 2>&1 < /dev/null & }
+# FreeLLMAPI next to Claude (manager/worker rule in the private vault's CLAUDE.md): free models for cheap, checked jobs.
+# Builds and starts in the background (~3 min); writes ~/.freellmapi.env. Provider keys: env var FREEAPI_CONFIG_JSON.
+PRIV="$(dirname "$VAULT")/yt-automation-vault-private"
+[ -f "$PRIV/cloud/freellmapi-session.sh" ] && { setsid nohup bash "$PRIV/cloud/freellmapi-session.sh" > /root/freellmapi.log 2>&1 < /dev/null & }
 
 # Cutline (timeline review before every long-form render, docs/editing-workflow.md Step 5): install once in the
 # background (~3 min, pnpm + build), then start it on localhost:4100. Log /root/cutline-bootstrap.log.
@@ -145,6 +149,13 @@ and follow $ROOT/CLAUDE.md (its "Cloud sessions" section). Work and outputs go i
 Save work back with git commit + git push only when the user asks.
 
 EOF
+cat >> "$HOME/.claude/CLAUDE.md" <<'NOTE'
+# Free models next to Claude
+FreeLLMAPI starts with every session (log /root/freellmapi.log, address and key in ~/.freellmapi.env). Claude is the
+manager, free models are the workers: delegate cheap jobs with yt-automation-vault-private/tools/worker/ask.py, check
+every result, and reject weak ones with --revise. Rules: "Manager and workers" in yt-automation-vault-private/CLAUDE.md.
+
+NOTE
 # The user's global working rules from the PC (synced by cloud/sync.sh).
 [ -f "$ROOT/cloud/global-claude.md" ] && cat "$ROOT/cloud/global-claude.md" >> "$HOME/.claude/CLAUDE.md"
 echo "workspace ready: $(ls "$HOME/.claude/skills" | wc -l) skills linked, repo at $ROOT"
